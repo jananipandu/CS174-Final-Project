@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Virus Checker</title>
+    <link href='https://fonts.googleapis.com/css?family=Inter' rel='stylesheet'>
+    <style>
+        *{
+            font-family: 'Inter';
+        }
+
+
+        .container{
+            padding: 50px;
+            margin: auto;
+            display: flexbox;
+            border: 1px black solid;
+            border-radius: 15px;
+            height: fit-content;
+            width: fit-content;
+        }
+
+        #welcome-msg{
+            font-size: 36px;
+            font-weight:500;
+        }
+
+        #select-msg{
+            font-size: 18px;
+            text-align: center;
+            padding-bottom: 20px;
+        }
+
+        .options{
+            width: fit-content;
+            height: fit-content;
+            margin: auto;
+        }
+
+        .btn{
+            margin-right: 20px;
+            background-color: #B8DBE0;
+            width: 240px;
+            height: 60px;
+            font-size: 22px;
+            border-radius: 20px;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo-big">
+            <h3 id="welcome-msg">Welcome to Online Virus Checker!</h3>
+        </div>
+        <p id="select-msg">Please select the type of user you are:</p>
+        <div class="options">
+            <button class="btn" onclick="window.location='userpage.php';">General User</button>
+            <button class="btn" onclick="window.location='adminlogin.php';">Admin</button>
+        </div>
+    </div>
+</body>
+</html>
