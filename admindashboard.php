@@ -18,7 +18,7 @@ _END;
         $name = $_FILES['upload']['name'];
         $malware_name = $_POST['malware_name'];
 
-        // santizing the filename just in case of any code present
+        // sanitizing the filename just in case of any code present
         $name = strtolower(preg_replace("/[^A-Za-z0-9.]/", "", $name)); 
 
         move_uploaded_file($_FILES['upload']['tmp_name'], $name);
