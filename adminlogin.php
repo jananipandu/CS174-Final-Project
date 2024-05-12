@@ -8,7 +8,100 @@ if ($conn->connect_error) {
 }
 
 echo <<<_END
-<html> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Online Virus Checker</title> <link href='https://fonts.googleapis.com/css?family=Inter' rel='stylesheet'> <style> *{ font-family: 'Inter'; } .container{ margin: 0 auto; padding: 50px; display: flexbox; height: fit-content; width: fit-content; } .logo-div{ width: fit-content; height: fit-content; margin: 15px; } #logo-name { font-size: 36px; font-weight: 200; } .admin-login-txt{ font-size: 22px; text-align: center; } .login-div{ display: grid; border: 1px black solid; padding: 50px; margin: auto; border-radius: 10px; } .login-labels{ margin-bottom: 5px; } .login-boxes{ width: 300px; height: 40px; border: 1px black solid; padding: 10px; border-radius: 12px; margin-bottom: 20px; } #submit-btn{ background-color: #B8DBE0; border: none; padding: 5px; font-size: 16px; border-radius: 20px; width: 100px; margin: auto; } </style> <script> function validateForm(form){ fail = ""; if(form.username.value == ""){ fail += "Please enter your username.\n" } if(form.password.value == ""){ fail += "Please enter your password.\n" } if(fail != ""){ alert(fail); } } </script> </head> <body> <div class="logo-div"> <h3 id="logo-name">Online Virus Checker</h3> </div> <div class="container"> <form method='post' action='adminlogin.php' enctype="multipart/form-data" onsubmit="return onUpload(this)"> <div class="login-div"> <h6 class="admin-login-txt">Admin Login</h6> <label class="login-labels">Username</label> <input class="login-boxes" type="text" name="username" maxlength="20" placeholder="username"> <label class="login-labels">Password</label> <input class="login-boxes" type="password" name="password" maxlength="20" placeholder="password"> <input id="submit-btn" type="submit" name="login" value="login"> </div> </form> </div> </body>
+<html> 
+    <head> 
+        <meta charset="UTF-8"> 
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+        <title>Online Virus Checker</title> 
+        <link href='https://fonts.googleapis.com/css?family=Inter' rel='stylesheet'> 
+        <style> 
+            *{ font-family: 'Inter'; } 
+            .container{ 
+                margin: 0 auto; 
+                padding: 50px; 
+                display: flexbox; 
+                height: fit-content; 
+                width: fit-content; 
+            } 
+            .logo-div{ 
+                width: fit-content; 
+                height: fit-content; 
+                margin: 15px; 
+            } 
+            #logo-name { 
+                font-size: 36px; 
+                font-weight: 200; 
+            } 
+            .admin-login-txt{ 
+                font-size: 22px; 
+                text-align: center; 
+            } 
+            .login-div{ 
+                display: grid; 
+                border: 1px black solid; 
+                padding: 50px; 
+                margin: auto; 
+                border-radius: 10px; 
+            } 
+            .login-labels{ 
+                margin-bottom: 5px; 
+            } 
+            .login-boxes{ 
+                width: 300px; 
+                height: 40px; 
+                border: 1px black solid; 
+                padding: 10px; 
+                border-radius: 12px; 
+                margin-bottom: 20px; 
+            } 
+            #submit-btn{ 
+                background-color: #B8DBE0; 
+                border: none; 
+                padding: 5px; 
+                font-size: 16px; 
+                border-radius: 20px; 
+                width: 100px; 
+                margin: auto; 
+            } 
+        </style> 
+        
+        <script> 
+            function validateForm(form){ 
+                fail = ""; 
+                if(form.username.value == ""){ 
+                    fail += "Please enter your username.\n" 
+                } if(form.password.value == ""){ 
+                    fail += "Please enter your password.\n" 
+                } if(fail != ""){ 
+                    alert(fail); 
+                } 
+            } 
+        </script> 
+    </head> 
+    
+    <body> 
+        <div class="logo-div"> 
+            <h3 id="logo-name">Online Virus Checker</h3> 
+        </div> 
+        
+        <div class="container"> 
+            <form method='post' action='adminlogin.php' enctype="multipart/form-data" 
+            onsubmit="return onUpload(this)"> 
+            <div class="login-div"> 
+                <h6 class="admin-login-txt">Admin Login</h6> 
+                <label class="login-labels">Username</label> 
+                <input class="login-boxes" type="text" name="username" maxlength="20" 
+                placeholder="username"> 
+                <label class="login-labels">Password</label> <input class="login-boxes" 
+                type="password" name="password" maxlength="20" placeholder="password"> 
+                <input id="submit-btn" type="submit" name="login" value="Login"> 
+                <br>
+                <br>
+                <input id="submit-btn" value="   Sign up" onclick="window.location='adminSignUp.php';"></button>
+            </div> 
+            </form> 
+        </div> 
+    </body>
 _END;
 
 if(isset($_POST['username']) && isset($_POST['password'])){ // for login
