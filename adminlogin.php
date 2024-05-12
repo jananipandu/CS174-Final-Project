@@ -97,7 +97,7 @@ echo <<<_END
                 <input id="submit-btn" type="submit" name="login" value="Login"> 
                 <br>
                 <br>
-                <input id="submit-btn" value="   Sign up" onclick="window.location='adminSignUp.php';"></button>
+                <input id="submit-btn" value="    Sign up" onclick="window.location='adminSignUp.php';"></button>
             </div> 
             </form> 
         </div> 
