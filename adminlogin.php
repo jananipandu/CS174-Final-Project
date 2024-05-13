@@ -86,7 +86,7 @@ echo <<<_END
         
         <div class="container"> 
             <form method='post' action='adminlogin.php' enctype="multipart/form-data" 
-            onsubmit="return onUpload(this)"> 
+            onsubmit="return validateForm(this)"> 
             <div class="login-div"> 
                 <h6 class="admin-login-txt">Admin Login</h6> 
                 <label class="login-labels">Username</label> 

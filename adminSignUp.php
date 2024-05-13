@@ -67,15 +67,40 @@ echo <<<_END
         
         <script> 
             function validateForm(form){ 
-                fail = ""; 
-                if(form.username.value == ""){ 
-                    fail += "Please enter your username.\n" 
-                } if(form.password.value == ""){ 
-                    fail += "Please enter your password.\n" 
-                } if(fail != ""){ 
-                    alert(fail); 
+                fail = validateFullname(form.fullname.value)
+                fail += validateUsername(form.username.value)
+                fail += validatePassword(form.password.value)
+
+                if(fail == "") return true
+                else {
+                    alert(fail)
+                    return false
                 } 
             } 
+
+            function validateForename(field) {
+                return (field = "") ? "Please enter your full name.\n" : ""
+            }
+
+            function validateUsername(field) {
+                if (field = "") return "Please enter your username.\n"
+                else if (field.length < 5)
+                    return "Username must be at least 5 characters long.\n"
+                else if (/[^a-zA-Z0-9_-]/.test(field))
+                    return "Only a-z, A-Z, 0-9, - and _ are allowed in username.\n"
+                return ""
+            }
+
+            function validatePassword(field) {
+                if (field = "") return "Please enter your password.\n"
+                else if (field.length < 8)
+                    return "Password must be at least 8 characters long.\n"
+                else if (!/[a-z]/.test(field) || !/[A-Z]/.test(field) || 
+                !/[0-9]/.test(field))
+                    return "Password requires one each of a-z, A-Z, and 0-9.\n"
+                return ""
+            } 
+            
         </script> 
     </head> 
     
@@ -86,11 +111,11 @@ echo <<<_END
         
         <div class="container"> 
             <form method='post' action='adminSignUp.php' enctype="multipart/form-data" 
-            onsubmit="return onUpload(this)"> 
+            onsubmit="return validateForm(this)"> 
             <div class="login-div"> 
                 <h6 class="admin-login-txt">Admin Sign Up</h6> 
                 <label class="login-labels">Full name</label> 
-                <input class="login-boxes" type="text" name="fullname" 
+                <input class="login-boxes" type="text" name="forename" 
                 maxlength="20" placeholder="full name">
                 <label class="login-labels">Username</label> 
                 <input class="login-boxes" type="text" name="username" 
