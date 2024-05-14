@@ -7,6 +7,49 @@ if ($conn->connect_error) {
     die ($conn->connect_error);
 }
 
+function validateForm($fullname, $username, $password, $usertype) {
+    $fail = validateFullname($fullname);
+    $fail .= validateUsername($username);
+    $fail .= validatePassword($password);
+    $fail .= validateUserType($usertype);
+
+    if ($fail === "") {
+        return "";
+    } else {
+        return $fail;
+    }
+}
+
+function validateFullname($field) {
+    return ($field === "") ? "Please enter your full name. " : "";
+}
+
+function validateUserType($field){
+    return ($field === "") ? "Please enter a type of user: Admin or User. " : "";
+}
+
+function validateUsername($field) {
+    if ($field === "") {
+        return "Please enter your username. ";
+    } elseif (strlen($field) < 5) {
+        return "Username must be at least 5 characters long. ";
+    } elseif (preg_match('/[^a-zA-Z0-9_-]/', $field)) {
+        return "Only a-z, A-Z, 0-9, - and _ are allowed in username. ";
+    }
+    return "";
+}
+
+function validatePassword($field) {
+    if ($field === "") {
+        return "No password entered. ";
+    } elseif (strlen($field) < 8) {
+        return "Password must be at least 8 characters long. ";
+    } elseif (!preg_match('/[a-z]/', $field) || !preg_match('/[A-Z]/', $field) || !preg_match('/[0-9]/', $field)) {
+        return "Password requires at least one lowercase letter, one uppercase letter, and one digit. ";
+    }
+    return "";
+}
+
 echo <<<_END
 <html> 
     <head> 
@@ -61,49 +104,36 @@ echo <<<_END
                 font-size: 16px; 
                 border-radius: 20px; 
                 width: 100px; 
+                margin: auto;
+            }
+
+            .user-type-label{ 
+                text-align: center;
+                margin-bottom: 5px; 
+            }
+
+            .user-type{ 
+                background-color: #b6e3b9; 
+                border: none; 
+                padding: 5px; 
+                font-size: 16px; 
+                border-radius: 10px; 
+                width: 100px; 
                 margin: auto; 
-            } 
+            }
+            .user-type-div{
+                display: flex;
+                margin-top: 15px;
+                margin-bottom: 30px;
+            }
+
+            #usertype{
+                margin: auto;
+                font-size: 18px;
+            }
+
         </style> 
-        
-        <script> 
-            function validateForm(form){ 
-                fail = validateFullname(form.fullname.value)
-                fail += validateUsername(form.username.value)
-                fail += validatePassword(form.password.value)
-
-                if(fail == "") return true
-                else {
-                    alert(fail)
-                    return false
-                } 
-            } 
-
-            function validateForename(field) {
-                return (field = "") ? "Please enter your full name.\n" : ""
-            }
-
-            function validateUsername(field) {
-                if (field = "") return "Please enter your username.\n"
-                else if (field.length < 5)
-                    return "Username must be at least 5 characters long.\n"
-                else if (/[^a-zA-Z0-9_-]/.test(field))
-                    return "Only a-z, A-Z, 0-9, - and _ are allowed in username.\n"
-                return ""
-            }
-
-            function validatePassword(field) {
-                if (field = "") return "Please enter your password.\n"
-                else if (field.length < 8)
-                    return "Password must be at least 8 characters long.\n"
-                else if (!/[a-z]/.test(field) || !/[A-Z]/.test(field) || 
-                !/[0-9]/.test(field))
-                    return "Password requires one each of a-z, A-Z, and 0-9.\n"
-                return ""
-            } 
-            
-        </script> 
-    </head> 
-    
+    </head>
     <body> 
         <div class="logo-div"> 
             <h3 id="logo-name">Online Virus Checker</h3> 
@@ -113,59 +143,65 @@ echo <<<_END
             <form method='post' action='adminSignUp.php' enctype="multipart/form-data" 
             onsubmit="return validateForm(this)"> 
             <div class="login-div"> 
-                <h6 class="admin-login-txt">Admin Sign Up</h6> 
+                <h6 class="admin-login-txt">Sign Up</h6> 
                 <label class="login-labels">Full name</label> 
-                <input class="login-boxes" type="text" name="forename" 
+                <input class="login-boxes" type="text" name="fullname" 
                 maxlength="20" placeholder="full name">
                 <label class="login-labels">Username</label> 
                 <input class="login-boxes" type="text" name="username" 
                 maxlength="20" placeholder="username"> 
                 <label class="login-labels">Password</label> 
                 <input class="login-boxes" type="password" name="password" 
-                maxlength="20" placeholder="password"> 
-                <input id="submit-btn" value="    Sign up" 
-                onclick="window.location='adminlogin.php';"></button>
-            </div> 
+                maxlength="20" placeholder="password">
+                
+                <label class="user-type-label">Type of user:</label> 
+                <div class='user-type-div'>
+                    <select name="usertype" id="usertype">
+                        <option value="admin">Admin</option>
+                        <option value="user">User</option>
+                    </select>
+                </div>
+                <button id="submit-btn" type='submit'>Sign up</button>
+            </div>
             </form> 
-        </div> 
-    </body>
+        </div>
 _END;
 
-if(isset($_POST['username']) && isset($_POST['password'])){ // for login
-    login($conn, $_POST['username'], $_POST['password']);
+if(isset($_POST['fullname']) && isset($_POST['username']) && isset($_POST['password']) && isset($_POST['usertype'])){ // for admin sign up
+    $validations = validateForm($_POST['fullname'], $_POST['username'], $_POST['password'], $_POST['usertype']);
+    if($validations !== ""){
+        die("<p style='text-align: center; color: red;'>$validations<p></body>");
+    } else {
+        signup($conn, $_POST['fullname'], $_POST['username'], $_POST['password'], $_POST['usertype']);
+    }
 } 
 
-function login($conn, $un, $pword){
+function signup($conn, $fullname, $username, $pword, $type){
 
-    $un_temp = sanitizeMySQL($conn, $un);
-    $pw_temp = sanitizeMySQL($conn, $pword);
+    $un = sanitizeMySQL($conn, $username);
+    $pw_clean = sanitizeMySQL($conn, $pword);
+    $password = hash_pw($pw_clean);
 
-    $stmt = $conn->prepare('SELECT * FROM credentials WHERE username=?');
-    $stmt->bind_param('s', $un_temp);
-    $stmt->execute();
-    $result = $stmt->get_result();
+    // inserting via placeholders for added protection
+    $stmt = $conn->prepare('INSERT INTO credentials VALUES(?,?,?)');
+    $stmt->bind_param('sss', $un, $password, $type);
 
-    if (!$result) {
-        die($conn->error);
-    } elseif ($result->num_rows) {
+    $result = $stmt->execute();
 
-        $row = $result->fetch_assoc();
-        $result->close();
-
-        $pwhash= hash_pw($pw_temp);
-
-        if ($pwhash == $row['PASSWORD']){
-
-            session_start();
-            $_SESSION['username'] = $un_temp;
-
-            header("Location: admindashboard.php");
-
-        } else {
-            die("<p>Invalid username/password combination! Please try again.</p>");
-        }
+    if (!$result){
+        $stmt->close();
+        die ("<p>Error in account creation. Please try again!</p></body>");
     } else {
-        die("<p>Invalid username/password combination! Please try again.</p>");
+        $stmt->close();
+        $url = "";
+        if($type === 'admin'){
+            $url = 'adminlogin.php';
+        } else if($type == 'user'){
+            $url = 'userlogin.php';
+        }
+
+        // continue to the first page
+        die("<p style='text-align: center;'><a href='$url'>Welcome, $fullname! Click here to login...</a></p></body>");
     }
     
 }
@@ -190,6 +226,5 @@ function sanitizeMySQL($conn, $var) {
     $var = sanitizeString($var);
     return $var;
 }
-
 
 ?>
